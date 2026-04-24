@@ -940,29 +940,6 @@ header {
 }
 .leaflet-control-attribution a { color:rgba(201,169,75,.6) !important; }
 
-/* ---------- LOADER ---------- */
-#loader {
-  position:fixed; inset:0; z-index:2000;
-  background:var(--navy);
-  display:flex; flex-direction:column; align-items:center; justify-content:center;
-  gap:14px; transition:opacity .4s;
-}
-#loader.hidden { opacity:0; pointer-events:none; }
-.loader-text {
-  font-family:'Playfair Display',serif;
-  color:var(--gold-l); font-size:1.1rem; letter-spacing:.04em;
-}
-.loader-bar {
-  width:180px; height:2px; background:rgba(255,255,255,.08);
-  border-radius:2px; overflow:hidden;
-}
-.loader-bar::after {
-  content:''; display:block; width:40%; height:100%;
-  background:linear-gradient(90deg, transparent, var(--gold), transparent);
-  animation:slide 1.2s infinite;
-}
-@keyframes slide { 0%{transform:translateX(-100%)} 100%{transform:translateX(350%)} }
-
 /* ---------- RESPONSIVE ---------- */
 @media (max-width:680px) {
   header { padding:0 14px; gap:10px; }
@@ -977,12 +954,6 @@ header {
 </style>
 </head>
 <body>
-
-<!-- LOADER -->
-<div id="loader">
-  <div class="loader-text">Cargando zonas de cobertura…</div>
-  <div class="loader-bar"></div>
-</div>
 
 <!-- HEADER -->
 <header>
@@ -1262,30 +1233,11 @@ document.getElementById('open-sidebar-btn').addEventListener('click', () => {
 });
 
 // ---------- INIT ----------
-function hideLoader() {
-  var el = document.getElementById('loader');
-  if (el) el.classList.add('hidden');
-}
-// Fallback: si algo falla, oculta el loader a los 5s
-setTimeout(hideLoader, 5000);
-
 try {
-  if (typeof L === 'undefined') {
-    throw new Error('Leaflet no cargo correctamente.');
-  }
   renderSidebar();
   drawZones();
-  setTimeout(hideLoader, 300);
 } catch (err) {
   console.error('[Mapa CE] Error al iniciar:', err);
-  var loader = document.getElementById('loader');
-  if (loader) {
-    loader.innerHTML = '<div style="color:#ff6b6b;font-family:Barlow,sans-serif;text-align:center;padding:20px;max-width:520px;">' +
-      '<div style="font-family:Playfair Display,serif;font-size:1.2rem;margin-bottom:10px;">Error al cargar el mapa</div>' +
-      '<div style="font-size:.85rem;opacity:.85;">' + String(err.message || err) + '</div>' +
-      '<div style="font-size:.72rem;opacity:.5;margin-top:14px;">Abre la consola del navegador (F12) para detalles.</div>' +
-    '</div>';
-  }
 }
 </script>
 </body>
